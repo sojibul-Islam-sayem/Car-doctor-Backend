@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 var jwt = require('jsonwebtoken');
+var cookieParser = require('cookie-parser')
 require('dotenv').config()
 const app = express();
 const port = process.env.PORT || 5000;
@@ -13,6 +14,7 @@ app.use(cors({
     credentials: true,
 }));
 app.use(express.json());
+app.use(cookieParser())
 
 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.acyxhfp.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
@@ -64,6 +66,8 @@ async function run() {
 
         app.get('/bookings', async (req, res) => {
             console.log(req.query.email)
+            console.log(req.cookies.token);
+            
             let query = {}
             if (req.query?.email) {
                 query = { email: req.query.email }
