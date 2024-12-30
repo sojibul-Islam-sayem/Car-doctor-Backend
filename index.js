@@ -53,6 +53,11 @@ async function run() {
             res.send(result);
         })
 
+        app.get('/test', (req, res) => {
+            res.send('Test route working!');
+        });
+        
+
         app.get('/services/:id', async (req, res) => {
             const id = req.params.id;
             const query = { _id: new ObjectId(id) };
