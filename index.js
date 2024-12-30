@@ -30,8 +30,6 @@ const client = new MongoClient(uri, {
 
 async function run() {
     try {
-        await client.connect();
-
         const servicesCollection = client.db('carDoctor').collection('services');
         const bookingCollection = client.db('carDoctor').collection('bookings');
 
@@ -56,7 +54,7 @@ async function run() {
         app.get('/test', (req, res) => {
             res.send('Test route working!');
         });
-        
+
 
         app.get('/services/:id', async (req, res) => {
             const id = req.params.id;
@@ -72,7 +70,7 @@ async function run() {
         app.get('/bookings', async (req, res) => {
             console.log(req.query.email)
             console.log(req.cookies.token);
-            
+
             let query = {}
             if (req.query?.email) {
                 query = { email: req.query.email }
