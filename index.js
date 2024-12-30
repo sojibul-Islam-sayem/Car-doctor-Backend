@@ -9,9 +9,21 @@ const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 
 
 
+const allowedOrigins = [
+    'http://localhost:5173', // Local development
+    'https://car-doctor-4e660.web.app', // Production
+];
+
 app.use(cors({
-    origin: 'http://localhost:5173',
-    credentials: true,
+    origin: function (origin, callback) {
+        // Allow requests with no origin (e.g., mobile apps or Postman)
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
+    credentials: true, // If cookies or HTTP authentication are used
 }));
 app.use(express.json());
 app.use(cookieParser())
@@ -60,7 +72,7 @@ async function run() {
             const id = req.params.id;
             const query = { _id: new ObjectId(id) };
             const options = {
-                projection: { title: 1, service_id: 1, price: 1, img: 1 },
+                projection: { title: 1, service_id: 1, price: 1, img: 1, description: 1, facility: 1, price: 1 },
             };
             const result = await servicesCollection.findOne(query, options);
             res.send(result);
