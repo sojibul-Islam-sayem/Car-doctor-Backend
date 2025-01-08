@@ -11,19 +11,20 @@ const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 
 const allowedOrigins = [
     'https://car-doctor-4e660.web.app', // Production
+    'https://car-doctor-4e660.firebaseapp.com', // Add this
 ];
 
 app.use(cors({
     origin: function (origin, callback) {
-        // Allow requests with no origin (e.g., mobile apps or Postman)
         if (!origin || allowedOrigins.includes(origin)) {
             callback(null, true);
         } else {
             callback(new Error('Not allowed by CORS'));
         }
     },
-    credentials: true, // If cookies or HTTP authentication are used
+    credentials: true, // Include credentials if necessary (e.g., cookies)
 }));
+
 app.use(express.json());
 app.use(cookieParser())
 
@@ -57,10 +58,15 @@ async function run() {
 
 
         app.get('/services', async (req, res) => {
-            const cursor = servicesCollection.find();
-            const result = await cursor.toArray();
-            res.send(result);
-        })
+            try {
+                const cursor = servicesCollection.find();
+                const result = await cursor.toArray();
+                res.send(result);
+            } catch (error) {
+                res.status(500).send({ message: 'Error fetching services', error });
+            }
+        });
+        
 
         app.get('/test', (req, res) => {
             res.send('Test route working!');
