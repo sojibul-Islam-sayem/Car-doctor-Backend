@@ -10,7 +10,6 @@ const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 
 
 const allowedOrigins = [
-    'http://localhost:5173', // Local development
     'https://car-doctor-4e660.web.app', // Production
 ];
 
